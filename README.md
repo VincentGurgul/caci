@@ -23,7 +23,7 @@ __Website:__ The course webpage is available through [Moodle](https://moodle.hu-
     ├── SWP_01.docx                                  # team report
     ├── Samle Questionnaire.pdf                      # sample questionnaire of CityTrips dataset
     └── VG_SWP_01.R                                  # R code, author: Vincent Gurgul
-└── SWP_02                                           # Special Work Performance 1: Describing Data
-    └── SWP_01.docx                                  # team report 
+└── SWP_02                                           # Special Work Performance 2: Reducing Data Complexity
+    └── CACI WS2021 SWP2.pdf                         # SWP 2 task describtion
 ```
 
