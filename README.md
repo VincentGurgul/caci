@@ -19,5 +19,5 @@ __Website:__ The course webpage is available through [Moodle](https://moodle.hu-
     ├── List of cities.xlsx                          # list of cities
     ├── QuestionaireData_CityTrips_csv.csv           # dataset with the results of the questionaire
     ├── VG_SWP_01.R                                  # R code, author: Vincent Gurgul
-    └── SWP_01.doc                                   # team report 
+    └── SWP_01.docx                                   # team report 
 ```
