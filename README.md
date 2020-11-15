@@ -21,3 +21,4 @@ __Website:__ The course webpage is available through [Moodle](https://moodle.hu-
     ├── VG_SWP_01.R                                  # R code, author: Vincent Gurgul
     └── SWP_01.docx                                   # team report 
 ```
+
