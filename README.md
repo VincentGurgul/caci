@@ -15,7 +15,7 @@ __Website:__ The course webpage is available through [Moodle](https://moodle.hu-
 ```
 .
 ├── README.md                                        # this readme file
-└── SWP_01                                           # Special Work Performance 1: Describing Data
+├── SWP_01                                           # Special Work Performance 1: Describing Data
 └── SWP_02                                           # Special Work Performance 2: Reducing Data Complexity
 ```
 
