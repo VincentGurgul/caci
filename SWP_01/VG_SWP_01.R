@@ -212,8 +212,6 @@ ggplot(data = pref, aes(city, avg_score)) +
 
 #### Part 2 ####
 
-## Berlin ##
-
 # preferences based on origin:
 
 LB = data.frame(Berlin_friendly = data$Berlin_Att16,
@@ -229,8 +227,41 @@ rm(LB)
 LB1    # Non-berliners find Berlin more friendly than Berliners
 
 
+# plotting attributes #
 
-w## the night is dark and full of errors ##
+# Attribute 1 : friendliness
+
+friendly = data.frame(city = c("Berlin", "Paris", "London", "Barcelona", "Madrid", "Rome",
+                               "Stockholm", "Amsterdam", "Prague", "Budapest", "Lisbon", "Brussels",
+                               "Vienna", "St. Petersburg", "Krakow", "Riga", "Istanbul", "Geneva",
+                               "Athens", "Dublin"),
+                      avg_score = c(mean(data$Berlin_Att1, na.rm = TRUE), mean(data$Paris_Att1, na.rm = TRUE),
+                               mean(data$London_Att1, na.rm = TRUE), mean(data$Barcelona_Att1, na.rm = TRUE),
+                               mean(data$Madrid_Att1, na.rm = TRUE), mean(data$Rome_Att1, na.rm = TRUE),
+                               mean(data$Stockholm_Att1, na.rm = TRUE), mean(data$Amsterdam_Att1, na.rm = TRUE),
+                               mean(data$Prague_Att1, na.rm = TRUE), mean(data$Budapest_Att1, na.rm = TRUE),
+                               mean(data$Lisbon_Att1, na.rm = TRUE), mean(data$Brussels_Att1, na.rm = TRUE),
+                               mean(data$Vienna_Att1, na.rm = TRUE), mean(data$StPetersburg_Att1, na.rm = TRUE),
+                               mean(data$Krakow_Att1, na.rm = TRUE), mean(data$Riga_Att1, na.rm = TRUE),
+                               mean(data$Istanbul_Att1, na.rm = TRUE), mean(data$Geneva_Att1, na.rm = TRUE),
+                               mean(data$Athens_Att1, na.rm = TRUE), mean(data$Dublin_Att1, na.rm = TRUE)
+                      ))
+
+friendly$city = factor(friendly$city, levels = friendly$city[order(-friendly$avg_score)])
+ggplot(data = friendly, aes(city, avg_score)) + 
+  geom_col(fill = "grey", color = "black") + 
+  coord_cartesian(ylim=c(3, 4.2)) +
+  theme_minimal() +
+  labs(title = "Attribute 1: Friendliniess", 
+       y = "Average score") +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.45), 
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1.05, vjust = 1.1),
+        axis.title.x = element_blank())
+# export as 600 by 250
+
+
+## the night is dark and full of errors ##
 
         
         
