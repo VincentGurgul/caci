@@ -1,0 +1,30 @@
+min(data$Age, na.rm = TRUE)
+max(data$Age, na.rm = TRUE)
+mean(data$Age, na.rm = TRUE)
+median(data$Age, na.rm = TRUE)
+
+
+hist ( data$Age, main ="Average Age Distribution of the Participants",     #Average Age Distribution of the Participants histogram
+     xlab ="Number of Participants",
+     ylab ="Age", breaks = 50, col = "lightblue")
+     
+     
+
+      
+      
+# Create data for the graph.                                                  # Colored 3-D pie chart for nationality distribution
+slices <-  c(122, 39, 26, 11, 68 )
+lbls <-  c("German","Russian","Bulgarian", "English", "Others")
+
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct) 
+lbls <- paste(lbls,"%",sep="")
+
+# Give the chart file a name.
+png(file = "3d_pie_chart.jpg")
+
+# Plot the chart.
+pie3D(slices,labels = lbls,explode = 0.1, main = "Nationality Distribution ", col = rainbow(length(x)))
+
+# Save the file.
+dev.off()
