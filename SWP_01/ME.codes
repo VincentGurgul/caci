@@ -92,6 +92,21 @@ plot2 <- ggplot(data = PRG_r, aes(PRG_r, agree)) +
        y = "Level of Agreement" , x= "relationship status")  + ylim(1,5) + geom_point(size = 5, shape = 10)
 
 grid.arrange(plot1, plot2, nrow=1, ncol=2)
+
+
+
+
+#Istanbul_friendly vs. Istanbul_english_friendly comparision
+
+Istanbul_friendly<- data$Istanbul_Att1
+Istanbul_language<-data$Istanbul_Att20
+Ist_f <- data.frame(Istanbul_friendly= data$Istanbul_Att1,
+                Istanbul_language = data$Istanbul_Att20)
+na.omit(Ist_f)
+
+table(Ist_f)
+summary(Ist_f)
+plot(Istanbul_friendly, Istanbul_language)
                                      
                                      
                                      
