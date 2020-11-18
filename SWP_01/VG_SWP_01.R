@@ -261,6 +261,206 @@ ggplot(data = friendly, aes(city, avg_score)) +
 # export as 600 by 250
 
 
+# Attribute 4: Trendiness
+
+trendy = data.frame(city = c("Berlin", "Paris", "London", "Barcelona", "Madrid", "Rome",
+                               "Stockholm", "Amsterdam", "Prague", "Budapest", "Lisbon", "Brussels",
+                               "Vienna", "St. Petersburg", "Krakow", "Riga", "Istanbul", "Geneva",
+                               "Athens", "Dublin"),
+                      avg_score = c(mean(data$Berlin_Att4, na.rm = TRUE), mean(data$Paris_Att4, na.rm = TRUE),
+                                    mean(data$London_Att4, na.rm = TRUE), mean(data$Barcelona_Att4, na.rm = TRUE),
+                                    mean(data$Madrid_Att4, na.rm = TRUE), mean(data$Rome_Att4, na.rm = TRUE),
+                                    mean(data$Stockholm_Att4, na.rm = TRUE), mean(data$Amsterdam_Att4, na.rm = TRUE),
+                                    mean(data$Prague_Att4, na.rm = TRUE), mean(data$Budapest_Att4, na.rm = TRUE),
+                                    mean(data$Lisbon_Att4, na.rm = TRUE), mean(data$Brussels_Att4, na.rm = TRUE),
+                                    mean(data$Vienna_Att4, na.rm = TRUE), mean(data$StPetersburg_Att4, na.rm = TRUE),
+                                    mean(data$Krakow_Att4, na.rm = TRUE), mean(data$Riga_Att4, na.rm = TRUE),
+                                    mean(data$Istanbul_Att4, na.rm = TRUE), mean(data$Geneva_Att4, na.rm = TRUE),
+                                    mean(data$Athens_Att4, na.rm = TRUE), mean(data$Dublin_Att4, na.rm = TRUE)
+                      ))
+
+trendy$city = factor(trendy$city, levels = trendy$city[order(-trendy$avg_score)])
+ggplot(data = trendy, aes(city, avg_score)) + 
+  geom_col(fill = "grey", color = "black") + 
+  coord_cartesian(ylim=c(2.5, 4.5)) +
+  theme_minimal() +
+  labs(title = "Attribute 4: Trendiness", 
+       y = "Average score") +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.45), 
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1.05, vjust = 1.1),
+        axis.title.x = element_blank())
+# export as 600 by 250
+
+
+# Attribute 5: Nightlife
+
+night = data.frame(city = c("Berlin", "Paris", "London", "Barcelona", "Madrid", "Rome",
+                             "Stockholm", "Amsterdam", "Prague", "Budapest", "Lisbon", "Brussels",
+                             "Vienna", "St. Petersburg", "Krakow", "Riga", "Istanbul", "Geneva",
+                             "Athens", "Dublin"),
+                    avg_score = c(mean(data$Berlin_Att5, na.rm = TRUE), mean(data$Paris_Att5, na.rm = TRUE),
+                                  mean(data$London_Att5, na.rm = TRUE), mean(data$Barcelona_Att5, na.rm = TRUE),
+                                  mean(data$Madrid_Att5, na.rm = TRUE), mean(data$Rome_Att5, na.rm = TRUE),
+                                  mean(data$Stockholm_Att5, na.rm = TRUE), mean(data$Amsterdam_Att5, na.rm = TRUE),
+                                  mean(data$Prague_Att5, na.rm = TRUE), mean(data$Budapest_Att5, na.rm = TRUE),
+                                  mean(data$Lisbon_Att5, na.rm = TRUE), mean(data$Brussels_Att5, na.rm = TRUE),
+                                  mean(data$Vienna_Att5, na.rm = TRUE), mean(data$StPetersburg_Att5, na.rm = TRUE),
+                                  mean(data$Krakow_Att5, na.rm = TRUE), mean(data$Riga_Att5, na.rm = TRUE),
+                                  mean(data$Istanbul_Att5, na.rm = TRUE), mean(data$Geneva_Att5, na.rm = TRUE),
+                                  mean(data$Athens_Att5, na.rm = TRUE), mean(data$Dublin_Att5, na.rm = TRUE)
+                    ))
+
+night$city = factor(night$city, levels = night$city[order(-night$avg_score)])
+ggplot(data = night, aes(city, avg_score)) + 
+  geom_col(fill = "grey", color = "black") + 
+  coord_cartesian(ylim=c(2.6, 4.6)) +
+  theme_minimal() +
+  labs(title = "Attribute 5: Nightlife", 
+       y = "Average score") +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.45), 
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1.05, vjust = 1.1),
+        axis.title.x = element_blank())
+
+
+# Attribute 11: Cleanliness
+
+clean = data.frame(city = c("Berlin", "Paris", "London", "Barcelona", "Madrid", "Rome",
+                            "Stockholm", "Amsterdam", "Prague", "Budapest", "Lisbon", "Brussels",
+                            "Vienna", "St. Petersburg", "Krakow", "Riga", "Istanbul", "Geneva",
+                            "Athens", "Dublin"),
+                   avg_score = c(mean(data$Berlin_Att11, na.rm = TRUE), mean(data$Paris_Att11, na.rm = TRUE),
+                                 mean(data$London_Att11, na.rm = TRUE), mean(data$Barcelona_Att11, na.rm = TRUE),
+                                 mean(data$Madrid_Att11, na.rm = TRUE), mean(data$Rome_Att11, na.rm = TRUE),
+                                 mean(data$Stockholm_Att11, na.rm = TRUE), mean(data$Amsterdam_Att11, na.rm = TRUE),
+                                 mean(data$Prague_Att11, na.rm = TRUE), mean(data$Budapest_Att11, na.rm = TRUE),
+                                 mean(data$Lisbon_Att11, na.rm = TRUE), mean(data$Brussels_Att11, na.rm = TRUE),
+                                 mean(data$Vienna_Att11, na.rm = TRUE), mean(data$StPetersburg_Att11, na.rm = TRUE),
+                                 mean(data$Krakow_Att11, na.rm = TRUE), mean(data$Riga_Att11, na.rm = TRUE),
+                                 mean(data$Istanbul_Att11, na.rm = TRUE), mean(data$Geneva_Att11, na.rm = TRUE),
+                                 mean(data$Athens_Att11, na.rm = TRUE), mean(data$Dublin_Att11, na.rm = TRUE)
+                   ))
+
+clean$city = factor(clean$city, levels = clean$city[order(-clean$avg_score)])
+ggplot(data = clean, aes(city, avg_score)) + 
+  geom_col(fill = "grey", color = "black") + 
+  coord_cartesian(ylim=c(2.6, 4.3)) +
+  theme_minimal() +
+  labs(title = "Attribute 11: Cleanliness", 
+       y = "Average score") +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.45), 
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1.05, vjust = 1.1),
+        axis.title.x = element_blank())
+
+
+# Attribute 14: Tourism
+
+tour = data.frame(city = c("Berlin", "Paris", "London", "Barcelona", "Madrid", "Rome",
+                          "Stockholm", "Amsterdam", "Prague", "Budapest", "Lisbon", "Brussels",
+                          "Vienna", "St. Petersburg", "Krakow", "Riga", "Istanbul", "Geneva",
+                          "Athens", "Dublin"),
+                 avg_score = c(mean(data$Berlin_Att14, na.rm = TRUE), mean(data$Paris_Att14, na.rm = TRUE),
+                               mean(data$London_Att14, na.rm = TRUE), mean(data$Barcelona_Att14, na.rm = TRUE),
+                               mean(data$Madrid_Att14, na.rm = TRUE), mean(data$Rome_Att14, na.rm = TRUE),
+                               mean(data$Stockholm_Att14, na.rm = TRUE), mean(data$Amsterdam_Att14, na.rm = TRUE),
+                               mean(data$Prague_Att14, na.rm = TRUE), mean(data$Budapest_Att14, na.rm = TRUE),
+                               mean(data$Lisbon_Att14, na.rm = TRUE), mean(data$Brussels_Att14, na.rm = TRUE),
+                               mean(data$Vienna_Att14, na.rm = TRUE), mean(data$StPetersburg_Att14, na.rm = TRUE),
+                               mean(data$Krakow_Att14, na.rm = TRUE), mean(data$Riga_Att14, na.rm = TRUE),
+                               mean(data$Istanbul_Att14, na.rm = TRUE), mean(data$Geneva_Att14, na.rm = TRUE),
+                               mean(data$Athens_Att14, na.rm = TRUE), mean(data$Dublin_Att14, na.rm = TRUE)
+                 ))
+
+tour$city = factor(tour$city, levels = tour$city[order(-tour$avg_score)])
+ggplot(data = tour, aes(city, avg_score)) + 
+  geom_col(fill = "grey", color = "black") + 
+  coord_cartesian(ylim=c(2.4, 4.4)) +
+  theme_minimal() +
+  labs(title = "Attribute 14: Tourism", 
+       y = "Average score") +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.45), 
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1.05, vjust = 1.1),
+        axis.title.x = element_blank())
+
+
+# Attribute 19: Beauty
+
+bt = data.frame(city = c("Berlin", "Paris", "London", "Barcelona", "Madrid", "Rome",
+                          "Stockholm", "Amsterdam", "Prague", "Budapest", "Lisbon", "Brussels",
+                          "Vienna", "St. Petersburg", "Krakow", "Riga", "Istanbul", "Geneva",
+                          "Athens", "Dublin"),
+                 avg_score = c(mean(data$Berlin_Att19, na.rm = TRUE), mean(data$Paris_Att19, na.rm = TRUE),
+                               mean(data$London_Att19, na.rm = TRUE), mean(data$Barcelona_Att19, na.rm = TRUE),
+                               mean(data$Madrid_Att19, na.rm = TRUE), mean(data$Rome_Att19, na.rm = TRUE),
+                               mean(data$Stockholm_Att19, na.rm = TRUE), mean(data$Amsterdam_Att19, na.rm = TRUE),
+                               mean(data$Prague_Att19, na.rm = TRUE), mean(data$Budapest_Att19, na.rm = TRUE),
+                               mean(data$Lisbon_Att19, na.rm = TRUE), mean(data$Brussels_Att19, na.rm = TRUE),
+                               mean(data$Vienna_Att19, na.rm = TRUE), mean(data$StPetersburg_Att19, na.rm = TRUE),
+                               mean(data$Krakow_Att19, na.rm = TRUE), mean(data$Riga_Att19, na.rm = TRUE),
+                               mean(data$Istanbul_Att19, na.rm = TRUE), mean(data$Geneva_Att19, na.rm = TRUE),
+                               mean(data$Athens_Att19, na.rm = TRUE), mean(data$Dublin_Att19, na.rm = TRUE)
+                 ))
+
+bt$city = factor(bt$city, levels = bt$city[order(-bt$avg_score)])
+ggplot(data = bt, aes(city, avg_score)) + 
+  geom_col(fill = "grey", color = "black") + 
+  coord_cartesian(ylim=c(3.4, 4.5)) +
+  theme_minimal() +
+  labs(title = "Attribute 19: Beauty", 
+       y = "Average score") +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.45), 
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1.05, vjust = 1.1),
+        axis.title.x = element_blank())
+
+
+
+# Attribute 20: English speaker friendliness
+
+eng = data.frame(city = c("Berlin", "Paris", "London", "Barcelona", "Madrid", "Rome",
+                            "Stockholm", "Amsterdam", "Prague", "Budapest", "Lisbon", "Brussels",
+                            "Vienna", "St. Petersburg", "Krakow", "Riga", "Istanbul", "Geneva",
+                            "Athens", "Dublin"),
+                   avg_score = c(mean(data$Berlin_Att20, na.rm = TRUE), mean(data$Paris_Att20, na.rm = TRUE),
+                                 mean(data$London_Att20, na.rm = TRUE), mean(data$Barcelona_Att20, na.rm = TRUE),
+                                 mean(data$Madrid_Att20, na.rm = TRUE), mean(data$Rome_Att20, na.rm = TRUE),
+                                 mean(data$Stockholm_Att20, na.rm = TRUE), mean(data$Amsterdam_Att20, na.rm = TRUE),
+                                 mean(data$Prague_Att20, na.rm = TRUE), mean(data$Budapest_Att20, na.rm = TRUE),
+                                 mean(data$Lisbon_Att20, na.rm = TRUE), mean(data$Brussels_Att20, na.rm = TRUE),
+                                 mean(data$Vienna_Att20, na.rm = TRUE), mean(data$StPetersburg_Att20, na.rm = TRUE),
+                                 mean(data$Krakow_Att20, na.rm = TRUE), mean(data$Riga_Att20, na.rm = TRUE),
+                                 mean(data$Istanbul_Att20, na.rm = TRUE), mean(data$Geneva_Att20, na.rm = TRUE),
+                                 mean(data$Athens_Att20, na.rm = TRUE), mean(data$Dublin_Att20, na.rm = TRUE)
+                   ))
+
+eng$city = factor(eng$city, levels = eng$city[order(-eng$avg_score)])
+ggplot(data = eng, aes(city, avg_score)) + 
+  geom_col(fill = "grey", color = "black") + 
+  coord_cartesian(ylim=c(2.6, 4.8)) +
+  theme_minimal() +
+  labs(title = "Attribute 20: English speaker friendliness", 
+       y = "Average score") +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.45), 
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1.05, vjust = 1.1),
+        axis.title.x = element_blank())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## the night is dark and full of errors ##
 
         
