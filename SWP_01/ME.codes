@@ -56,7 +56,7 @@ pie3D(slices,labels = lbls,explode = 0.1, main = "Nationality Distribution ", co
 dev.off()
 
 
----------------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------------
 
 
                                                                                   
@@ -64,9 +64,12 @@ dev.off()
 istanbul_pref = data.frame(istanbul_pref = c("Strongly Disagree", "Disagree",          #Got this error: Error in data.frame(istanbul_pref = c("Strongly Disagree", "Disagree",  : 
                                              "Neither Agree Nor Disagree",             #arguments imply differing number of rows: 5, 9, 1
                                              "Agree", "Strongly Agree"),
-                           share = c(sum(data$Istanbul_Att1 == 1)/0.59, na.rm = TRUE, sum(data$Istanbul_Att1 == 2)/0.59, na.rm = TRUE,
-                                     sum(data$Istanbul_Att1 == 3)/0.59, na.rm = TRUE, sum(data$Istanbul_Att1 == 4)/0.59, na.rm = TRUE,
-                                     sum(data$Istanbul_Att1 == 5)/0.59), na.rm = TRUE )
+                           share = c(sum(data$Istanbul_Att1 == 1)/0.59, na.rm = TRUE), (sum(data$Istanbul_Att1 == 2)/0.59, na.rm = TRUE),
+                                     (sum(data$Istanbul_Att1 == 3)/0.59, na.rm = TRUE), (sum(data$Istanbul_Att1 == 4)/0.59, na.rm = TRUE),
+                                     (sum(data$Istanbul_Att1 == 5)/0.59), na.rm = TRUE ))
+                                     
+                                     
+                                     
                                      
                                      
                                      
@@ -92,6 +95,23 @@ plot2 <- ggplot(data = PRG_r, aes(PRG_r, agree)) +
        y = "Level of Agreement" , x= "relationship status")  + ylim(1,5) + geom_point(size = 5, shape = 10)
 
 grid.arrange(plot1, plot2, nrow=1, ncol=2)
+
+
+
+Revised version of Paris:
+PRS <- data.frame(Paris_romantic = data$Paris_Att17, relship = data$PartnershipStatus)        #Tried to check if single people and not single people would rate cities romanticness differently
+PRS <- na.omit(PRS)
+table(PRS)
+PRS_r <- data.frame(PRS_r = c("single", "in a relationship"), agree= c(mean(PRS$Paris_romantic[PRS$relship == "single"]), mean(PRS$Paris_romantic[PRS$relship == "in a relationship."]))) 
+plot12 <- ggplot(data = PRS_r, aes(PRS_r, agree)) + 
+  labs(title = "Do you find Paris romantic?", 
+       y = "Level of Agreement" , x= "relationship status")  + ylim(1,5) + geom_point(size = 5, shape = 10)
+plot12
+
+
+
+
+
 
 
 
