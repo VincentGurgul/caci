@@ -53,3 +53,21 @@ str(citynames)
 citynames$Testcol=c("test1")
 citynames
 str(citynames)
+
+
+df = data.frame(city = citynames,
+                visits = c(berlinlb, parislb, londonlb, barcelonalb, madridlb, romelb, stockholmlb, amsterdamlb, praguelb, budapestlb,
+                           lisbonlb, brusselslb, viennalb, stpetersburglb, krakowlb, rigalb, istanbullb, genevalb, athenslb, dublinlb))
+
+df$city = factor(df$city, levels = df$city[order(-df$visits)])
+ggplot(data = df, aes(city, visits)) +
+  geom_col(color = "black", fill = "grey") +
+  labs(title = "Number of city visits of lowbudget travellers", y = "number of visits") +
+  geom_col(fill = "grey", color = "black") +
+  theme_minimal() +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.46), 
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1.1, vjust = 1.2),
+        axis.title.x = element_blank())
+
+
