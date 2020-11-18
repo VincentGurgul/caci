@@ -1,3 +1,5 @@
+## CACI Winter Term 20/21
+
 ##SWP1
 ##Author: Luisa Hahn 
 
@@ -12,12 +14,14 @@ library(dplyr)
 library(klaR)
 library(psych)
 library(lattice)
+library(grid)
 library(gridExtra)
 
 data = read.csv("QuestionaireData_CityTrips_csv.csv", stringsAsFactors = FALSE)
 
 
 ##demographics##
+
 
 #age
 mean(data$Age, na.rm = TRUE)
@@ -58,12 +62,14 @@ plot(occg)
 
 # Do you think Berlin/Rome is save? (by gender)
 
+
 BS <- data.frame(Berlin_save = data$Berlin_Att18, gender = data$Gender )
 BS <- na.omit(BS)
 BS_g <- data.frame(BS_g = c("Female", "Male"), agree = c(mean(BS$Berlin_save[BS$gender == "Female"]), mean(BS$Berlin_save[BS$gender == "Male"])))
 plot1 <- ggplot(data = BS_g, aes(BS_g, agree)) + 
   labs(title = "Do you think Berlin is save?", 
          y = "Level of Agreement" , x= "gender")  + ylim(1,5) + geom_point(size = 5, shape = 10)
+plot1
 
 RS <- data.frame(Rome_save = data$Rome_Att18, gender = data$Gender )
 RS <- na.omit(RS)
@@ -77,23 +83,33 @@ grid.arrange(plot1, plot2, nrow=1, ncol=2)
 
 
 
-#is Berlin too touristic? by from_Berlin / other_city 
+## Too touristic?
 
+
+#is Berlin too touristic? by from_Berlin / other_city 
 
 Bt = data.frame(Berlin_touristic= data$Berlin_Att14,
                 current_city = data$CurrentCity)
-
 Bt$current_city <- fifelse(Bt$current_city %in% c("Berlin", "BERLIN"), "Berlin", "Not Berlin")
 Bt1 = Bt %>%
   group_by(current_city) %>%
   summarize(Berlin_touristic = mean(Berlin_touristic, na.rm = T))
 na.omit(Bt)
 Bt1
-plot3 <- ggplot(data = Bt1, aes(current_city, Berlin_touristic))  + theme_bw() + 
-              labs(title = "Is Berlin too touristic?", y = "Level of Agreement", x = "Current City") + ylim(1,5) + geom_point(size = 5, shape = 10)
 
 
-# compare to Paris by current_city = Paris
+#London 
+Lt = data.frame(London_touristic= data$London_Att14,
+                current_city = data$CurrentCity)
+Lt$current_city <- fifelse(Lt$current_city %in% "London", "London", "Not London")
+Lt1 = Lt %>%
+  group_by(current_city) %>%
+  summarize(London_touristic = mean(London_touristic, na.rm = T))
+na.omit(Lt)
+Lt1
+
+
+#Paris
 
 
 Pt = data.frame(Paris_touristic= data$Paris_Att14,
@@ -105,10 +121,107 @@ Pt1 = Pt %>%
   summarize(Paris_touristic = mean(Paris_touristic, na.rm = T))
 na.omit(Pt)
 Pt1
-plot4 <- ggplot(data = Pt1, aes(current_city, Paris_touristic))  + theme_bw() + 
-  labs(title = "Is Paris too touristic?", y = "Level of Agreement", x = "Current City")  + ylim(1,5) + geom_point(size = 5, shape = 10) 
 
-grid.arrange(plot3, plot4, nrow=1, ncol=2)
+
+#Barcelona  
+
+Bat = data.frame(Barcelona_touristic= data$Barcelona_Att14,
+                current_city = data$CurrentCity)
+Bat$current_city <- fifelse(Bat$current_city %in% "Barcelona", "Barcelona", "Not Barcelona")
+Bat1 = Bat %>%
+  group_by(current_city) %>%
+  summarize(Barcelona_touristic = mean(Barcelona_touristic, na.rm = T))
+na.omit(Bat)
+Bat1
+
+
+# Stockholm
+
+St = data.frame(Stockholm_touristic= data$Stockholm_Att14,
+                 current_city = data$CurrentCity)
+St$current_city <- fifelse(St$current_city %in% "Stockholm", "Stockholm", "Not Stockholm")
+St1 = St %>%
+  group_by(current_city) %>%
+  summarize(Stockholm_touristic = mean(Stockholm_touristic, na.rm = T))
+na.omit(St)
+St1
+
+
+# Budapest 
+
+But = data.frame(Budapest_touristic= data$Budapest_Att14,
+                current_city = data$CurrentCity)
+But$current_city <- fifelse(But$current_city %in% "Budapest", "Budapest", "Not Budapest")
+But1 = But %>%
+  group_by(current_city) %>%
+  summarize(Budapest_touristic = mean(Budapest_touristic, na.rm = T))
+na.omit(But)
+But1
+
+# Vienna 
+
+Vt = data.frame(Vienna_touristic= data$Vienna_Att14,
+                 current_city = data$CurrentCity)
+Vt$current_city <- fifelse(Vt$current_city %in% "Vienna", "Vienna", "Not Vienna")
+Vt1 = Vt %>%
+  group_by(current_city) %>%
+  summarize(Vienna_touristic = mean(Vienna_touristic, na.rm = T))
+na.omit(Vt)
+Vt1
+
+# overall mean 
+
+Ctm <- data.frame(City_touristic = c(Bt1$Berlin_touristic, Pt1$Paris_touristic, Lt1$London_touristic, Bat1$Barcelona_touristic,
+                                     St1$Stockholm_touristic, But1$Budapest_touristic, Vt1$Vienna_touristic),
+                  current_city = c(Bt1$current_city, Pt1$current_city, Lt1$current_city, Bat1$current_city, St1$current_city,
+                                   But1$current_city, Vt1$current_city))
+
+
+
+# get the mean over all cities and plot
+
+Ctm$current_city <- fifelse(Ctm$current_city %in% c("Not Berlin", "Not Paris", "Not London", "Not Barcelona",
+                                                    "Not Stockholm", "Not Budapest", "Not Vienna"), "Tourists", "Locals")
+Ctm1 = Ctm %>% 
+        group_by(current_city) %>%
+        summarize(City_touristic = mean(City_touristic))
+na.omit(Ctm)
+Ctm1
+
+
+plot_Ctm1 <- ggplot(data = Ctm1, aes(current_city, City_touristic))  + theme_bw() + 
+  labs(title = "Is the city too touristic?", y = "Level of Agreement", x="") + ylim(1,5) + geom_point(size = 5, shape = 10)
+plot_Ctm1
+
+
+
+
+#plotting diff. cities 
+
+plotB <- ggplot(data = Bt1, aes(current_city, Berlin_touristic))  + theme_bw() + 
+  labs(y="Level of Agreement", x = "") + ylim(1,5) + geom_point(size = 5, shape = 10)
+
+plotP <- ggplot(data = Pt1, aes(current_city, Paris_touristic))  + theme_bw() + 
+  labs(y="", x = "")  + ylim(1,5) + geom_point(size = 5, shape = 10) 
+
+plotL <- ggplot(data = Lt1, aes(current_city, London_touristic))  + theme_bw() + 
+  labs(y="", x = "")  + ylim(1,5) + geom_point(size = 5, shape = 10) 
+
+plotBa <- ggplot(data = Bat1, aes(current_city, Barcelona_touristic))  + theme_bw() + 
+  labs(y="", x = "")  + ylim(1,5) + geom_point(size = 5, shape = 10) 
+
+plotS <- ggplot(data = St1, aes(current_city, Stockholm_touristic))  + theme_bw() + 
+  labs(y="", x = "")  + ylim(1,5) + geom_point(size = 5, shape = 10) 
+
+plotBu <- ggplot(data = But1, aes(current_city, Budapest_touristic))  + theme_bw() + 
+  labs(y="",x = "")  + ylim(1,5) + geom_point(size = 5, shape = 10)
+
+plotV <- ggplot(data = Vt1, aes(current_city, Vienna_touristic))  + theme_bw() + 
+  labs(y="", x = "")  + ylim(1,5) + geom_point(size = 5, shape = 10) 
+
+
+grid.arrange(plotB, plotP, plotL, plotBa, plotS, plotBu, plotV, nrow=1, ncol=7, top = "Is the city too touristic?") 
+        
 
 
 
@@ -145,8 +258,8 @@ BBB <-  data.frame(budget= c("<200", "200-300", "300-400", "400-500", ">500"),
                              mean(BB$b_beautiful[BB$budg == 5],na.rm = T)))
 BBB
 BBB$budget = factor(BBB$budget, levels = BBB$budget[order(-BBB$agree)])
-B <- ggplot(data = BBB, aes(budget, agree)) + geom_col()  + labs(title = "Berlin") 
-
+B <- ggplot(data = BBB, aes(budget, agree)) + geom_col()  + labs(title = "Berlin", x= "Budget", y= "Level of Agreement") 
+B
 
 
 #Rome 
@@ -158,16 +271,42 @@ RBB <-  data.frame(budget= c("<200", "200-300", "300-400", "400-500", ">500"),
                              mean(RB$R_beautiful[RB$budg == 5],na.rm = T)))
 
 RBB$budget = factor(RBB$budget, levels = RBB$budget[order(-RBB$agree)])
-R <- ggplot(data = RBB, aes(budget, agree)) + geom_col()  + labs(title = "Rome") 
+R <- ggplot(data = RBB, aes(budget, agree)) + geom_col()  + labs(title = "Rome", x= "Budget", y= "Level of Agreement") 
 
 
-grid.arrange(B, R, nrow=1, ncol=2 )
+#Paris
+
+PB <-  data.frame(P_beautiful = data$Paris_Att19, budg = data$Avg_Budget)
+PBB <-  data.frame(budget= c("<200", "200-300", "300-400", "400-500", ">500"), 
+                   agree = c(mean(PB$P_beautiful[PB$budg == 1], na.rm = T), mean(PB$P_beautiful[PB$budg == 2],na.rm = T),
+                             mean(PB$P_beautiful[PB$budg == 3],na.rm = T), mean(PB$P_beautiful[PB$budg == 4],na.rm = T),
+                             mean(PB$P_beautiful[PB$budg == 5],na.rm = T)))
+PBB
+
+PBB$budget = factor(PBB$budget, levels = PBB$budget[order(-PBB$agree)])
+P <- ggplot(data = PBB, aes( budget, agree)) + geom_col()  + labs(title = "Paris", x= "Budget", y= "Level of Agreement") 
+P
+
+#London
+
+LB <-  data.frame(L_beautiful = data$London_Att19, budg = data$Avg_Budget)
+LBB <-  data.frame(budget= c("<200", "200-300", "300-400", "400-500", ">500"), 
+                   agree = c(mean(LB$L_beautiful[LB$budg == 1], na.rm = T), mean(LB$L_beautiful[LB$budg == 2],na.rm = T),
+                             mean(LB$L_beautiful[LB$budg == 3],na.rm = T), mean(LB$L_beautiful[LB$budg == 4],na.rm = T),
+                             mean(LB$L_beautiful[LB$budg == 5],na.rm = T)))
+
+LBB$budget = factor(LBB$budget, levels = LBB$budget[order(-LBB$agree)])
+L <- ggplot(data = LBB, aes( budget, agree)) + geom_col()  + labs(title = "London", x= "Budget", y= "Level of Agreement") 
+L
+
+
+grid.arrange(B, R, P, L,  nrow=1, ncol=4, top= "Is the city beautiful?")
 
 
 
 
 
-#what's the most favourite city among the people who traveled more than 5 times in 2015
+
 
 
 
