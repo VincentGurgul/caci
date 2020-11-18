@@ -1,18 +1,44 @@
+library(plotrix)
+library(ggplot2)
+library(colorspace)
+library(dplyr)
+library(tidyverse)
+library(data.table)
+library(klaR)
+library(questionr)
+library(lattice)
+library(grid)
+library(gridExtra)
+library(devtools)
+
+
+
+data<-QuestionaireData_CityTrips_csv
+
+
+summary(data)
+str(data)
+data.frame(data)
+
+
 min(data$Age, na.rm = TRUE)
 max(data$Age, na.rm = TRUE)
 mean(data$Age, na.rm = TRUE)
 median(data$Age, na.rm = TRUE)
 
 
-hist ( data$Age, main ="Average Age Distribution of the Participants",     #Average Age Distribution of the Participants histogram
+hist ( data$Age, main ="Average Age Distribution of the Participants",        #Average Age Distribution of the Participants histogram
      xlab ="Number of Participants",
      ylab ="Age", breaks = 50, col = "lightblue")
      
      
 
-      
-      
-# Create data for the graph.                                                  # Colored 3-D pie chart for nationality distribution
+                                                                                   
+
+data.frame(data$Nationality)                                                   # Colored 3-D pie chart for nationality distribution
+table(data$Nationality)
+
+# Create data for the graph.                                                  
 slices <-  c(122, 39, 26, 11, 68 )
 lbls <-  c("German","Russian","Bulgarian", "English", "Others")
 
@@ -30,4 +56,55 @@ pie3D(slices,labels = lbls,explode = 0.1, main = "Nationality Distribution ", co
 dev.off()
 
 
--------------
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+                                                                                  
+                                    
+istanbul_pref = data.frame(istanbul_pref = c("Strongly Disagree", "Disagree",          #Got this error: Error in data.frame(istanbul_pref = c("Strongly Disagree", "Disagree",  : 
+                                             "Neither Agree Nor Disagree",             #arguments imply differing number of rows: 5, 9, 1
+                                             "Agree", "Strongly Agree"),
+                           share = c(sum(data$Istanbul_Att1 == 1)/0.59, na.rm = TRUE, sum(data$Istanbul_Att1 == 2)/0.59, na.rm = TRUE,
+                                     sum(data$Istanbul_Att1 == 3)/0.59, na.rm = TRUE, sum(data$Istanbul_Att1 == 4)/0.59, na.rm = TRUE,
+                                     sum(data$Istanbul_Att1 == 5)/0.59), na.rm = TRUE )
+                                     
+                                     
+                                     
+PRS <- data.frame(Paris_romantic = data$Paris_Att17, relship = data$PartnershipStatus)        #Tried to check if single people and not single people would rate cities romanticness differently
+PRS <- na.omit(PRS)
+table(PRS)
+PRS_r <- data.frame(PRS_r = c("single", "in a relationship"), agree= c(mean(PRS$relship[PR$relship == "single"]), mean(PRS$relship[PR$relship == "in a relationship."]))) 
+plot1 <- ggplot(data = PRS_r, aes(PRS_r, agree)) + 
+  labs(title = "Do you find Paris romantic?", 
+       y = "Level of Agreement" , x= "relationship status")  + ylim(1,5) + geom_point(size = 5, shape = 10)
+
+
+
+PRG <- data.frame(Prague_romantic = data$Prague_Att17, relship = data$PartnershipStatus)
+PRG <- na.omit(PRG)
+PRG
+table(PRG)
+data$PartnershipStatus<-as.factor(data$PartnershipStatus)
+
+PRG_r <- data.frame(PRG_r = C("single", "in a relationship."), agree = c(mean(PRG$relship[PR$relship == "single"]), mean(PRG$relship[PRG$relship == "in a relationship."])))
+plot2 <- ggplot(data = PRG_r, aes(PRG_r, agree)) + 
+  labs(title = "Do you find Prague romantic?", 
+       y = "Level of Agreement" , x= "relationship status")  + ylim(1,5) + geom_point(size = 5, shape = 10)
+
+grid.arrange(plot1, plot2, nrow=1, ncol=2)
+                                     
+                                     
+                                     
+                                     
+
+
+
+
+
+
+
+
+
+
+
+
