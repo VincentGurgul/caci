@@ -90,7 +90,9 @@ summary(attribute)
 
 
 
-# NON-METRIC
+# Non-Metric MDS
+
+
 dist.df <- dist(attribute) 
 is.na(dist.df)
 dist.df
@@ -106,6 +108,7 @@ abline(h = 0, v = 0, col = "grey")
 
 
 # Property Fitting
+
 
 profit <- lm(cbind(preference,
                    friendly,
@@ -141,5 +144,58 @@ abline(h = 0, v = 0, col = "grey")
 arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
        x1 = coef(profit)[1, ]*10, y1 = coef(profit)[2, ]*10, col = 2, lwd = 1)
 text(t(coef(profit)*10), colnames(coef(profit)*10), cex=0.65, col = 1, pos = 4)
+
+
+# Property fitting with ideal points
+
+
+fit <- cmdscale(dist.df, k = 2)
+fit
+x <- fit[,1]
+y <- fit[,2]
+q <- x*x+y*y
+  
+
+profit <- lm(cbind(preference,
+                   friendly,
+                   historical,
+                   affordable,
+                   trendy,
+                   nightlife,
+                   delicious_food,
+                   transportation,
+                   shopping,
+                   cultural_events,
+                   interesting_museums,
+                   clean,
+                   green,
+                   international,
+                   too_touristic,
+                   fun,
+                   noisy,
+                   romantic,
+                   safe,
+                   beautiful,
+                   english_speaker_friendly
+) ~ 1 +  x + y + q, data = attribute)
+
+str( attribute)
+summary(profit)
+coef<-coef(profit)
+coef
+coef[2,]<-coef[2,]/(2*coef[4,])
+coef[3,]<-coef[3,]/(2*coef[4,])
+
+coef
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+     pch = 19, ylim = c(-14, 14), xlim = c(-14, 14))
+text(x, y, labels = attribute$Group.1, cex = 0.75, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+
+
+points(x = coef[2, ], y = coef[3, ], col = 3)
+text(x= coef[2, ], y= coef[3, ], labels = colnames(coef), cex = 0.75, pos = 4,col=3)
+
+
 
 
