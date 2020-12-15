@@ -1,0 +1,133 @@
+install.packages("reshape2")
+library(reshape2)
+library(ggplot2)
+library(dplyr)
+library(wooldridge)
+library(corrplot)
+library(tidyverse)
+library(magrittr)
+library(ggpubr)
+library(tibble)
+library(MASS)
+
+install.packages("MASS")
+suppressWarnings(suppressMessages(library("MASS")))
+
+
+
+setwd("C:/Users/Administrator/Downloads")
+
+
+data.long <- read.csv("data.cities.long.csv")
+data.wide <- data
+
+names(data.long)[names(data.long) == "V1"] <- "friendly"
+names(data.long)[names(data.long) == "V2"] <- "historical"
+names(data.long)[names(data.long) == "V3"] <- "affordable"
+names(data.long)[names(data.long) == "V4"] <- "trendy"
+names(data.long)[names(data.long) == "V5"] <- "nightlife"
+names(data.long)[names(data.long) == "V6"] <- "delicious_food"
+names(data.long)[names(data.long) == "V7"] <- "transportation"
+names(data.long)[names(data.long) == "V8"] <- "shopping"
+names(data.long)[names(data.long) == "V9"] <- "cultural_events"
+names(data.long)[names(data.long) == "V10"] <- "interesting_museums"
+names(data.long)[names(data.long) == "V11"] <- "clean"
+names(data.long)[names(data.long) == "V12"] <- "green"
+names(data.long)[names(data.long) == "V13"] <- "international"
+names(data.long)[names(data.long) == "V14"] <- "too_touristic"
+names(data.long)[names(data.long) == "V15"] <- "fun"
+names(data.long)[names(data.long) == "V16"] <- "noisy"
+names(data.long)[names(data.long) == "V17"] <- "romantic"
+names(data.long)[names(data.long) == "V18"] <- "safe"
+names(data.long)[names(data.long) == "V19"] <- "beautiful"
+names(data.long)[names(data.long) == "V20"] <- "english_speaker_friendly"
+
+
+
+str(data.long)
+
+head(data.long[order(data.long$ID),],8)
+
+
+attribute<-aggregate(data.long[,-c(21,22,23)], by=list(data.long$City),mean, na.rm=TRUE)
+
+
+
+head(attribute,20)
+
+#Metric MDS
+
+dist.df <- dist(attribute) 
+dist.df
+
+fit <- cmdscale(dist.df, k = 2)
+fit
+x <- fit[,1]
+y <- fit[,2]
+
+tmp <- mds[,1]*-1
+mds[,2]<-tmp
+mds
+
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Metric MDS", 
+     pch = 19, ylim = c(-4, 4), xlim = c(-4, 4))
+text(x, y, labels = attribute$Group.1, cex = 1, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+
+
+
+str(attribute)
+summary(attribute)
+
+
+
+# NON-METRIC
+dist.df <- dist(attribute[,-c(1)]) 
+fit <- isoMDS(dist.df, k = 2)
+fit
+x <- fit$points[,1]
+y <- fit$points[,2]
+
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Non-Metric MDS", 
+     pch = 19, ylim = c(-4, 4), xlim = c(-4, 4))
+text(x, y, labels = attribute$Group.1, cex = 1, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+
+
+# Property Fitting
+
+profit <- lm(cbind(friendly,
+                   historical,
+                   affordable,
+                   trendy,
+                   nightlife,
+                   delicious_food,
+                   transportation,
+                   shopping,
+                   cultural_events,
+                   interesting_museums,
+                   clean,
+                   green,
+                   international,
+                   too_touristic,
+                   fun,
+                   noisy,
+                   romantic,
+                   safe,
+                   beautiful,
+                   english_speaker_friendly
+                   ) ~ -1 +  x + y, data = attribute)
+
+summary(profit)
+coef(profit)
+str(profit)
+
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Non-Metric MDS", 
+     pch = 19, ylim = c(-5, 5), xlim = c(-5, 5))
+text(x, y, labels = attribute$Group.1, cex = 0.75, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+arrows(x0 = c(0, 0, 0), y0 = c(0, 0, 0), 
+       x1 = coef(profit)[1, ]*10, y1 = coef(profit)[2, ]*10, col = 2, lwd = 1)
+text(t(coef(profit)*10), colnames(coef(profit)*10), cex=0.65, col = 1, pos = 4)
+
+
