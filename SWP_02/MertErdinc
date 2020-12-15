@@ -18,9 +18,14 @@ suppressWarnings(suppressMessages(library("MASS")))
 setwd("C:/Users/Administrator/Downloads")
 
 
-data.long <- read.csv("data.cities.long.csv")
+data.long <- read.csv("data.cities.long (2).csv")
 data.wide <- data
 
+summary(data.long)
+
+str(data.long)
+
+names(data.long)[names(data.long) == "Pref"] <- "preference"
 names(data.long)[names(data.long) == "V1"] <- "friendly"
 names(data.long)[names(data.long) == "V2"] <- "historical"
 names(data.long)[names(data.long) == "V3"] <- "affordable"
@@ -46,10 +51,13 @@ names(data.long)[names(data.long) == "V20"] <- "english_speaker_friendly"
 
 str(data.long)
 
+summary(data.long)
+
+
 head(data.long[order(data.long$ID),],8)
 
 
-attribute<-aggregate(data.long[,-c(21,22,23)], by=list(data.long$City),mean, na.rm=TRUE)
+attribute<-aggregate(data.long[,-c(1,2,3)], by=list(data.long$City),mean, na.rm=TRUE)
 
 
 
@@ -58,6 +66,7 @@ head(attribute,20)
 #Metric MDS
 
 dist.df <- dist(attribute) 
+is.na(dist.df)
 dist.df
 
 fit <- cmdscale(dist.df, k = 2)
@@ -82,7 +91,9 @@ summary(attribute)
 
 
 # NON-METRIC
-dist.df <- dist(attribute[,-c(1)]) 
+dist.df <- dist(attribute) 
+is.na(dist.df)
+dist.df
 fit <- isoMDS(dist.df, k = 2)
 fit
 x <- fit$points[,1]
@@ -96,7 +107,8 @@ abline(h = 0, v = 0, col = "grey")
 
 # Property Fitting
 
-profit <- lm(cbind(friendly,
+profit <- lm(cbind(preference,
+                   friendly,
                    historical,
                    affordable,
                    trendy,
