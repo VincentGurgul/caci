@@ -1,0 +1,94 @@
+## SWP 2 
+## part b 
+## FA 
+
+setwd("/Users/hahnl/Desktop/Master/Kurse/Customer Analytics and Customer Insights/SWP2")
+
+library(plyr)
+library(data.table)
+library(ggplot2)
+library(dplyr)
+library(psych)
+library(lattice)
+library(gridExtra)
+library(tidyverse)
+
+data<-read.csv("QuestionaireData_CityTrips_csv.csv")
+dat<-read.csv("new_subset.csv")
+
+
+head(dat)
+attribute<-aggregate(dat[,-c(1,2,3,4)], by=list(dat$City,dat$Sample),mean, na.rm=TRUE)
+nrow(attribute)
+str(attribute)
+head(attribute,20)
+attribute <- na.omit(attribute)
+head(attribute)
+nrow(attribute)
+colnames(attribute)[colnames(attribute) == "Group.1"] <- "City"
+colnames(attribute)[colnames(attribute) == "Group.2"] <- "ID"
+colnames(attribute)[colnames(attribute) == "V1"] <- "friendly"
+colnames(attribute)[colnames(attribute) == "V2"] <- "historical"
+colnames(attribute)[colnames(attribute) == "V3"] <- "affordable"
+colnames(attribute)[colnames(attribute) == "V4"] <- "trendy"
+colnames(attribute)[colnames(attribute) == "V5"] <- "vibrant"
+colnames(attribute)[colnames(attribute) == "V6"] <- "delifood"
+colnames(attribute)[colnames(attribute) == "V7"] <- "easyaround"
+colnames(attribute)[colnames(attribute) == "V8"] <- "shopping"
+colnames(attribute)[colnames(attribute) == "V9"] <- "culturalevents"
+colnames(attribute)[colnames(attribute) == "V10"] <- "museum"
+colnames(attribute)[colnames(attribute) == "V11"] <- "clean"
+colnames(attribute)[colnames(attribute) == "V12"] <- "green"
+colnames(attribute)[colnames(attribute) == "V13"] <- "multicultural"
+colnames(attribute)[colnames(attribute) == "V14"] <- "tootouristic"
+colnames(attribute)[colnames(attribute) == "V15"] <- "fun"
+colnames(attribute)[colnames(attribute) == "V16"] <- "noisy"
+colnames(attribute)[colnames(attribute) == "V17"] <- "romantic"
+colnames(attribute)[colnames(attribute) == "V18"] <- "safe"
+colnames(attribute)[colnames(attribute) == "V19"] <- "beautiful"
+colnames(attribute)[colnames(attribute) == "V20"] <- "Englishspeaking"
+attribute<-attribute[,-2] #ID excluded
+head(attribute)
+ncol(attribute)
+nrow(attribute)
+as.matrix(attribute[,1:4])
+
+library(corrplot)
+par(mfrow=c(1,1))
+
+corrplot(corr=cor(attribute[,3:22],use ="complete.obs"), method = "shade")
+
+# Eigenvalue
+eigen(cor(attribute[,3:22]))$values
+# Scree Plot
+plot(eigen(cor(attribute[,3:22]))$values)
+
+## FA
+#f=4
+head(attribute)
+a.fa<-fa(attribute[,3:22],method=minres,scores="tenBerge", nfactors=4, rotate ="varimax")
+a.fa
+aggregate(a.fa$scores, by=list(attribute$City),mean, na.rm=TRUE) # compute aggregate component score for cities
+t(a.fa$scores)%*%a.fa$scores/(nrow(attribute[,3:22])-1)
+
+#f=5
+a.fa.5<-fa(attribute[,3:22],method=minres,scores="tenBerge", nfactors=5, rotate ="varimax")
+a.fa.5
+
+a.fa.6<-fa(attribute[,3:22],method=minres,scores="tenBerge", nfactors=6, rotate ="varimax")
+a.fa.6
+
+aggregate(a.fa$scores, by=list(attribute$City),mean, na.rm=TRUE) # compute aggregate component score for cities
+t(a.fa$scores)%*%a.fa$scores/(nrow(attribute[,3:22])-1)
+
+
+a.fa<-fa(attribute[,3:22],method=mle,scores='tenBerge', nfactors=2, rotate ="varimax")
+a.fa
+scores<-aggregate(a.fa$scores, by=list(attribute$City),mean, na.rm=TRUE)
+x <- scores[,2]
+y <- scores[,3]
+plot(x, y, xlab = "Coordinate 1", ylab = "Coordinate 2", main = "Factor Analysis", 
+     pch = 19, ylim = c(-2, 2), xlim = c(-2, 2))
+text(x, y, labels = scores[,1], cex = 1, pos = 4)
+abline(h = 0, v = 0, col = "grey")
+
