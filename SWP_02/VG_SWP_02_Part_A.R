@@ -136,8 +136,8 @@ ggplot(as.data.frame(fit)) +
         axis.text.y = element_blank(),
         axis.title.x = element_blank(),
         axis.title.y = element_blank()) +
-  geom_segment(data = d, aes(x = 0, y = 0, xend = d$V1, yend = d$V2), arrow = arrow(length = unit(0.5, "cm")), colour = "darkred") +
-  geom_text(data = d, aes(V1, V2, label = rownames(d)), size=3, hjust = 1.1, vjust = 0, colour = "darkred")
+  geom_segment(data = d, aes(x = 0, y = 0, xend = d$V1, yend = d$V2), arrow = arrow(length = unit(3.5, "mm")), colour = "darkred") +
+  geom_text(data = d, aes(V1, V2, label = rownames(d)), size=3.1, hjust = 1.1, vjust = -0.5, colour = "darkred")
 
 ## non metric
 
@@ -203,6 +203,6 @@ ggplot(as.data.frame(fit2$points)) +
         axis.text.y = element_blank(),
         axis.title.x = element_blank(),
         axis.title.y = element_blank()) +
-  geom_segment(data = d2, aes(x = 0, y = 0, xend = d2$V1, yend = d$V2), arrow = arrow(length = unit(0.5, "cm")), colour = "darkred") +
-  geom_text(data = d2, aes(V1, V2, label = rownames(d2)), size=3, hjust = 1.1, vjust = 0, colour = "darkred")
+  geom_segment(data = d2, aes(x = 0, y = 0, xend = d2$V1, yend = d2$V2), arrow = arrow(length = unit(3.5, "mm")), colour = "darkred") +
+  geom_text(data = d2, aes(V1, V2, label = rownames(d2)), size=3.1, hjust = 1.1, vjust = -0.5, colour = "darkred")
 
