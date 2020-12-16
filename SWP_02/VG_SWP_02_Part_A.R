@@ -147,7 +147,7 @@ x2 <- fit2$points[,1]
 y2 <- fit$points[,2]
 
 ggplot(as.data.frame(fit2$points), aes(V1, V2, label = attribute$Group.1)) +
-  labs(title = "Metric MDS") +
+  labs(title = "Non-Metric MDS") +
   coord_cartesian(ylim = c(-3, 3), xlim = c(-3, 3)) +
   geom_point() + 
   geom_vline(xintercept = 0) +
@@ -190,7 +190,7 @@ d2 = data.frame(V1 = coef(profit2)[1,]*10,
                V2 = coef(profit2)[2,]*10)
 
 ggplot(as.data.frame(fit2$points)) +
-  labs(title = "Metric MDS") +
+  labs(title = "Non-Metric MDS") +
   coord_cartesian(ylim = c(-4, 5.1), xlim = c(-4, 3)) +
   geom_point(aes(V1, V2)) + 
   geom_vline(xintercept = 0) +
