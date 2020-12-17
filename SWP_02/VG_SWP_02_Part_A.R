@@ -124,7 +124,7 @@ d = data.frame(V1 = coef(profit)[1,]*10,
 
 ggplot(as.data.frame(fit)) +
   labs(title = "Metric MDS") +
-  coord_cartesian(ylim = c(-4, 5), xlim = c(-4, 3)) +
+  coord_cartesian(ylim = c(-4, 5.1), xlim = c(-4.1, 3)) +
   geom_point(aes(V1, V2)) + 
   geom_vline(xintercept = 0) +
   geom_hline(yintercept = 0) +
@@ -136,7 +136,7 @@ ggplot(as.data.frame(fit)) +
         axis.text.y = element_blank(),
         axis.title.x = element_blank(),
         axis.title.y = element_blank()) +
-  geom_segment(data = d, aes(x = 0, y = 0, xend = d$V1, yend = d$V2), arrow = arrow(length = unit(3.5, "mm")), colour = "darkred") +
+  geom_segment(data = d, aes(x = 0, y = 0, xend = d$V1, yend = d$V2), arrow = arrow(length = unit(3, "mm")), colour = "darkred") +
   geom_text(data = d, aes(V1, V2, label = rownames(d)), size=3.1, hjust = 1.1, vjust = -0.5, colour = "darkred")
 
 ## non metric
@@ -144,7 +144,7 @@ ggplot(as.data.frame(fit)) +
 dist2 <- dist(attribute) 
 fit2 <- isoMDS(dist2, k = 2)
 x2 <- fit2$points[,1]
-y2 <- fit$points[,2]
+y2 <- fit2$points[,2]
 
 ggplot(as.data.frame(fit2$points), aes(V1, V2, label = attribute$Group.1)) +
   labs(title = "Non-Metric MDS") +
@@ -203,6 +203,6 @@ ggplot(as.data.frame(fit2$points)) +
         axis.text.y = element_blank(),
         axis.title.x = element_blank(),
         axis.title.y = element_blank()) +
-  geom_segment(data = d2, aes(x = 0, y = 0, xend = d2$V1, yend = d2$V2), arrow = arrow(length = unit(3.5, "mm")), colour = "darkred") +
+  geom_segment(data = d2, aes(x = 0, y = 0, xend = d2$V1, yend = d2$V2), arrow = arrow(length = unit(3, "mm")), colour = "darkred") +
   geom_text(data = d2, aes(V1, V2, label = rownames(d2)), size=3.1, hjust = 1.1, vjust = -0.5, colour = "darkred")
 
