@@ -191,7 +191,7 @@ d2 = data.frame(V1 = coef(profit2)[1,]*10,
 
 ggplot(as.data.frame(fit2$points)) +
   labs(title = "Non-Metric MDS") +
-  coord_cartesian(ylim = c(-4, 5.1), xlim = c(-4, 3)) +
+  coord_cartesian(ylim = c(-3.3, 5.2), xlim = c(-4, 3)) +
   geom_point(aes(V1, V2)) + 
   geom_vline(xintercept = 0) +
   geom_hline(yintercept = 0) +
