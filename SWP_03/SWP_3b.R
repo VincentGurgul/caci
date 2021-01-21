@@ -16,6 +16,7 @@ setwd("/Users/VincentGurgul/Documents/BWL/msc_03/caci/swp_03")
 sum <- function (data , groups) 
 {aggregate (data , list(groups), function (x) mean(as.numeric (x)))}
 
+config = 0.6 # config for pointsize in plots
 
 ### Contents
 
@@ -29,22 +30,32 @@ sum <- function (data , groups)
 
 ### 1. Data preparation
 
-b <- read.csv("indivData.csv")
+b <- read.csv("indivData.csv")      # calculation dataset
+c <- b                              # evaluation dataset
 
-b1 <- b[ , -c(27,29,30,32,34,36)] # removed non-numeric variables
+c['brand_awareness'] <- rowMeans(b[4:11])
+c['knowledge'] <- rowMeans(b[12:16])
+c['involvement'] <- rowMeans(b[17:21])
+
+b1 <- b[, -c(27,29,30,32,34,36)] # removed non-numeric variables
+c1 <- c[, -c(27,29,30,32,34,36)] # removed non-numeric variables
+
 b2 <- b[, -c(1, 4:23, 25:34, 36)] # reduced variables for MDS / clustering 
-b3 <- b1[, -c(4:11, 17:21)] # reduced variables for meaningful comparison
+c2 <- c[, -c(1, 4:23, 25:34, 36)] # reduced variables for MDS / clustering 
 
+b3 <- b1[, -c(4:11, 17:21)] # reduced variables for meaningful comparison
+c3 <- c1[, -c(4:11, 17:21)] # reduced variables for meaningful comparison
+
+d <- c1[, -c(1, 4:23)]
 
 ## Multidimensional Scaling
 
-dist <- dist(apply(b2, 2, scale)) 
+dist <- dist(apply(b2, 2, scale)) # main distance matrix for clustering (best MDS)
 
-fit <- cmdscale(dist, k = 2)
+fit <- cmdscale(dist, k = 2) 
 
-ggplot(as.data.frame(fit), aes(V1, V2)) +
-  labs(title = "Metric MDS") +
-  geom_point() + 
+p1 <- ggplot(as.data.frame(fit), aes(V1, V2)) +
+  geom_point(size = config) + 
   theme_minimal() +
   theme(text = element_text(size=10),
         plot.title = element_text(size = 11, hjust = 0.5), 
@@ -53,8 +64,37 @@ ggplot(as.data.frame(fit), aes(V1, V2)) +
         axis.title.x = element_blank(),
         axis.title.y = element_blank())
 
-# it becomes clear that we want 3 main clusters
+dist2 <- dist(apply(b1, 2, scale)) 
 
+fit2 <- cmdscale(dist2, k = 2)
+
+p2 <- ggplot(as.data.frame(fit2), aes(V1, V2)) +
+  geom_point(size = config) + 
+  theme_minimal() +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.5), 
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+dist3 <- dist(apply(c2, 2, scale)) 
+
+fit3 <- cmdscale(dist3, k = 2)
+
+p3 <- ggplot(as.data.frame(fit3), aes(V1, V2)) +
+  geom_point(size = config) + 
+  theme_minimal() +
+  theme(text = element_text(size=10),
+        plot.title = element_text(size = 11, hjust = 0.5), 
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+ggarrange(p2, p3, p1, ncol = 3, nrow = 1, labels = "AUTO")
+
+# when using b2 it is clear that we want 3 main clusters
 
 ### 2. Hierarchical Clustering
 
@@ -110,6 +150,7 @@ pehc3 <- fviz_cluster(ehc3,
              labelsize = 0, 
              show.clust.cent = FALSE)
 sehc3 <- fviz_silhouette(ehc3)
+#dehc3 <- fviz_dend(ehc3, rect = TRUE) #dendrogram 3
 
 ehc4 <- eclust(b2, "hclust", k=4)
 pehc4 <- fviz_cluster(ehc4, 
@@ -121,8 +162,10 @@ pehc4 <- fviz_cluster(ehc4,
              labelsize = 0, 
              show.clust.cent = FALSE)
 sehc4 <- fviz_silhouette(ehc4)
+#dehc4 <- fviz_dend(ehc4, rect = TRUE) #dendrogram 4
 
 ggarrange(pehc3, pehc4, sehc3, sehc4)
+ggarrange(pehc3, pehc4, sehc3, sehc4, dehc3, dehc4, ncol = 2, nrow = 3)
 
 ### 3. K-Means Clustering
 
@@ -194,6 +237,7 @@ sekm4 <- fviz_silhouette(ekm4)
 
 ggarrange(pekm3, pekm4, sekm3, sekm4)
 
+ggarrange(pehc3, pekm3, sehc3, sekm3)
 
 ### 4. Gaussian Mixture Modelling
 
@@ -248,6 +292,7 @@ set.seed(123)
 
 # compute DBSCAN using dbscan package
 db <- dbscan::dbscan(fit, 0.5, 3)
+print(db)
 
 library(fpc)
 
@@ -257,12 +302,10 @@ fpc.db <- fpc::dbscan(fit, eps = 0.5, MinPts = 3)
 # make sure the results of both packages are identical
 all(fpc.db$cluster == db$cluster)
 
-print(db)
-
 ggplot(as.data.frame(fit) %>% add_column(cluster = factor(db$cluster)), aes(V1, V2, color = cluster)) +
   labs(title = "DBSCAN with 3 Clusters and Outliers") +
   geom_point() + 
-  theme_minimal() +
+  theme_bw() +
   theme(text = element_text(size=10),
         plot.title = element_text(size = 11, hjust = 0.5), 
         axis.text.x = element_blank(),
@@ -280,7 +323,7 @@ fviz_cluster(db,
              labelsize = 0, 
              show.clust.cent = FALSE)
 
-sum(b3, db$cluster)
+sum(c3, db$cluster)
 
 
 ### 6. Comparing Results / Evaluation
@@ -289,47 +332,56 @@ sum(b3, db$cluster)
 
 phc <- ggplot(as.data.frame(fit) %>% add_column(cluster = factor(hc3)), aes(V1, V2, color = cluster)) +
   labs(title = "Hierarchical Clustering") +
-  geom_point() + 
-  theme_minimal() +
+  geom_point(size = config) + 
+  theme_grey() +
   theme(text = element_text(size=10),
         plot.title = element_text(size = 11, hjust = 0.5), 
+        axis.ticks = element_blank(),
         axis.text.x = element_blank(),
         axis.text.y = element_blank(),
         axis.title.x = element_blank(),
-        axis.title.y = element_blank())
+        axis.title.y = element_blank()) + 
+  scale_color_manual(values = c("1" = "red3", "2" = "green4", "3" = "blue2"))
 
 pkm <- ggplot(as.data.frame(fit) %>% add_column(cluster = factor(km3$cluster)), aes(V1, V2, color = cluster)) +
   labs(title = "K-Means Clustering") +
-  geom_point() + 
-  theme_minimal() +
+  geom_point(size = config) + 
+  theme_grey() +
   theme(text = element_text(size=10),
         plot.title = element_text(size = 11, hjust = 0.5), 
+        axis.ticks = element_blank(),
         axis.text.x = element_blank(),
         axis.text.y = element_blank(),
         axis.title.x = element_blank(),
-        axis.title.y = element_blank())
+        axis.title.y = element_blank()) + 
+  scale_color_manual(values = c("1" = "red3", "2" = "green4", "3" = "blue2"))
 
 pgmm <- ggplot(as.data.frame(fit) %>% add_column(cluster = factor(gmm3$class)), aes(V1, V2, color = cluster)) +
   labs(title = "Gaussian Mixture Modelling") +
-  geom_point() + 
-  theme_minimal() +
+  geom_point(size = config) + 
+  theme_grey() +
   theme(text = element_text(size=10),
         plot.title = element_text(size = 11, hjust = 0.5), 
+        axis.ticks = element_blank(),
         axis.text.x = element_blank(),
         axis.text.y = element_blank(),
         axis.title.x = element_blank(),
-        axis.title.y = element_blank())
+        axis.title.y = element_blank()) + 
+  scale_color_manual(values = c("1" = "red3", "2" = "green4", "3" = "blue2"))
 
 pdb <- ggplot(as.data.frame(fit) %>% add_column(cluster = factor(db$cluster)), aes(V1, V2, color = cluster)) +
   labs(title = "DBSCAN") +
-  geom_point() + 
-  theme_minimal() +
+  geom_point(size = config) + 
+  theme_grey() +
   theme(text = element_text(size=10),
         plot.title = element_text(size = 11, hjust = 0.5), 
+        axis.ticks = element_blank(),
         axis.text.x = element_blank(),
         axis.text.y = element_blank(),
         axis.title.x = element_blank(),
-        axis.title.y = element_blank())
+        axis.title.y = element_blank()) + 
+  scale_color_manual(values = c("0" = "black", "1" = "red3", "2" = "green4", "3" = "blue2"))
+  
 
 ggarrange(phc, pkm, pgmm, pdb)
 
@@ -378,16 +430,18 @@ ggarrange(pehc, pekm, pegmm, pedb)
 
 # numerical comparison
 
-sum(b3, hc3)
-sum(b3, hc4)
+sum(c1, hc3)
+sum(c1, hc4)
 
-sum(b3, km3$cluster)
-sum(b3, km4$cluster)
+sum(c1, km3$cluster)
+sum(c1, km4$cluster)
 
-sum(b3, gmm3$class)
-sum(b3, gmm4$class)
+sum(c1, gmm3$class)
+sum(c1, gmm4$class)
 
-sum(b3, db$cluster) # DBSCAN: best result and therefore only important one for the analysis!
+sum(c1, db$cluster) # DBSCAN: best result and therefore only important one for the analysis!
+
+c1["cluster"] <- factor(db$cluster) # added cluster as column
 
 # Clusters:
 
